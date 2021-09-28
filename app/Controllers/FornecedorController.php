@@ -75,7 +75,7 @@ class FornecedorController extends BaseController
 
         if ($codFornDel) {
             $this->deletarFornecedor($codFornDel);
-            return redirect()->to(base_url('FornecedorController/listaCodFornecedor/'));
+            return redirect()->to(base_url('FornecedorController/listaCodForn/'));
         }
 
         if ($codFornAlterar) {
@@ -156,5 +156,20 @@ class FornecedorController extends BaseController
         }
         return redirect()->to(base_url('FornecedorController/todosFornecedores/'));
     }
+
+    public function deletarFornecedorCod($codfornecedor = null)
+    {
+        if (is_null($codfornecedor)) {
+            return redirect()->to(base_url('FornecedorController/listCodForn/'));
+        }
+
+        $FornecedorModel = new \App\Models\FornecedorModel();
+        if ($FornecedorModel->delete($codfornecedor)) {
+            return redirect()->to(base_url('FornecedorController/listCodForn/'));
+        } else {
+            return redirect()->to(base_url('FornecedorController/listCodForn/'));
+        }
+    }
+
 
 }
