@@ -46,34 +46,38 @@
     $request = service('request');
 
     //Ternário
-    $codfun = isset($funcionario->codFun)?$funcionario->codFun:0;
-    $nomeFun = isset($funcionario->nomeFun)?$funcionario->nomeFun:'';
-    $foneFun = isset($funcionario->foneFun)?$funcionario->foneFun:'';
+    $codfun = isset($funcionario->codFun) ? $funcionario->codFun : 0;
+    $nomeFun = isset($funcionario->nomeFun) ? $funcionario->nomeFun : '';
+    $foneFun = isset($funcionario->foneFun) ? $funcionario->foneFun : '';
 
-    if($codfun){
+    if ($codfun) {
 
     ?>
 
-    <form method="Post">
-        <div class="mb-3">
-            <label for="codusu" class="form-label">Código Funcionário</label>
-            <input type="text" class="form-control" id="codFun" name="codFun" value="<?=$codfun?>" readonly aria-describedby="Exemplo: 123">
-        </div>
+        <form method="Post">
+            <div class="mb-3">
+                <label for="codufun" class="form-label">Código Funcionário</label>
+                <input type="text" class="form-control" id="codFun" name="codFun" value="<?= $codfun ?>" readonly aria-describedby="Exemplo: 123">
+            </div>
 
-        <div class="mb-3">
-            <label for="nome" class="form-label">Nome do Funcionário</label>
-            <input type="text" class="form-control" id="nome" name="nomeFun" value="<?=$nomeFun?>" aria-describedby="nomeHelp" required>
-        </div>
+            <div class="mb-3">
+                <label for="nome" class="form-label">Nome do Funcionário</label>
+                <input type="text" class="form-control" id="nome" name="nomeFun" value="<?= $nomeFun ?>" aria-describedby="nomeHelp" required>
+            </div>
 
-        <div class="mb-3">
-            <label for="fone" class="form-label">Fone do Funcionário</label>
-            <input type="text" class="form-control" id="fone" name="foneFun" value="<?=$foneFun?>" required>
-        </div>
+            <div class="mb-3">
+                <label for="fone" class="form-label">Fone do Funcionário</label>
+                <input type="text" class="form-control" id="fone" name="foneFun" value="<?= $foneFun ?>" required>
+            </div>
 
-        <button type="submit" class="btn btn-success">Alterar</button>
-        <button type="submit" class="btn btn-success">Deletar</button> 
-    </form>
+            <button type="submit" class="btn btn-success">Alterar</button>
+        </form>
+
+        <form method="Post">
+            <input type="hidden" name="codFunDeletar" value="<?= $codfun ?>">
+            <button type="submit" class="btn btn-primary"> Deletar </button>
+        </form>
 
     <?php
-}
+    }
     ?>

@@ -105,18 +105,16 @@ public function index()
         echo view('footer');
     }
 
-    public function funcionarioExcluir(){
-        // if (is_null($codfuncionario )) {
-        //    return redirect()->to(base_url('UsuarioController/todosUsuarios'));
-        //}
+    public function funcionarioExcluir($codFunDeletar){
+        if (is_null($codFunDeletar)) {
+            return redirect()->to(base_url('Usuarios/todosUsuarios'));
+        }
 
-       // $UsuarioModel = new \App\Models\UsuarioModel();
-        //if ($UsuarioModel->delete($codfuncionario)) {
-          //  return redirect()->to(base_url('UsuarioController/todosUsuarios'));
-       // }// else {
-           // return redirect()->to(base_url('UsuarioController/todosUsuarios'));
-       // }
-        // return redirect()->to(base_url('UsuarioController/todosUsuarios')); //
+        $FuncionarioModel = new \App\Models\FuncionarioModel();
+
+        if ($FuncionarioModel->delete($codFunDeletar));{
+
+        }
     }
 
 }
