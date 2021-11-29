@@ -1,16 +1,16 @@
 <?php
 namespace App\Controllers;
 
-class FuncionarioController extends BaseController {
+class ClienteController extends BaseController {
 	public function index()
 	{
-		return redirect()->to(base_url("FuncionarioController/inserirFuncionario"));
+		return redirect()->to(base_url("ClienteController/inserirCliente"));
 	}
 
-	public function inserirFuncionario()
+	public function inserirCliente()
 	{
 		$request = service('request');
-		$FuncionarioModelo = new \App\Models\FuncionarioModel();
+		$ClienteModelo = new \App\Models\ClienteModel();
 		$UsuarioModel = new \App\Models\UsuarioModel();
 		if($request -> getMethod() === 'post') 
 		{			
@@ -26,12 +26,13 @@ class FuncionarioController extends BaseController {
 				</svg>";
 			}
 			elseif ($codusuario==null) {
-				$FuncionarioModelo->set('codusu_FK', $request->getPost('codusu_FK'));
-				$FuncionarioModelo->set('nomeFun', $request->getPost('nomeFun'));
-				$FuncionarioModelo->set('foneFun', $request->getPost('foneFun'));
+				$ClienteModelo->set('codusu_FK', $request->getPost('codusu_FK'));
+				$ClienteModelo->set('CpfCli', $request->getPost('CpfCli'));
+				$ClienteModelo->set('nomeCli', $request->getPost('nomeCli'));
+				$ClienteModelo->set('foneCli', $request->getPost('foneCli'));
 				
 
-				if($FuncionarioModelo->insert()) {
+				if($ClienteModelo->insert()) {
 					$data['msg'] = 'Informações cadastradas com sucesso';
 					$data['cor'] = 'alert-success';
 					$data['icon'] = 
@@ -56,79 +57,79 @@ class FuncionarioController extends BaseController {
 
 		if(isset($data)) {
 			echo view('header', $data);
-			echo view('cadFun', $data);
+			echo view('cadCli', $data);
 		}
 		else {
 			echo view('header');
-			echo view('cadFun');
+			echo view('cadCli');
 		}
 
 		echo view('footer');
 	}
-	public function todosFuncionarios() {
+	public function todosClientes() {
 		$request = service('request');
-		$codFuncionario = $request->getPost('codFun');
-		$codFunAlterar = $request->getPost('codFunAlterar');
-		if($codFuncionario) {
-			$this->deletarFuncionario($codFuncionario, 0);
+		$CpfCli = $request->getPost('CpfCli');
+		$CpfCliAlterar = $request->getPost('CpfCliAlterar');
+		if($CpfCli) {
+			$this->deletarCliente($CpfCli, 0);
 		}
-		else if($codFunAlterar) {
-			$this->alterarFuncionario($codFunAlterar, 0);
+		else if($CpfCliAlterar) {
+			$this->alterarCliente($CpfCliAlterar, 0);
 		}
 
-		$FuncionarioModel = new \App\Models\FuncionarioModel();
-		$registros = $FuncionarioModel -> find();
-		$data['funcionarios'] = $registros;
+		$ClienteModel = new \App\Models\ClienteModel();
+		$registros = $ClienteModel -> find();
+		$data['clientes'] = $registros;
 
 		echo view('header', $data);
-		echo view('listaFun', $data);
+		echo view('listaCli', $data);
 		echo view('footer');
 	}
-	public function buscaFuncionario() {
+	public function buscaCliente() {
 		$request = service('request');
 		$searchMode = $request->getPost('searchMode');
-		$codFuncionario = $request->getPost('codFun');
-		$nomeFun = $request->getPost('nomeFun');
-		$foneFun = $request->getPost('foneFun');
-		$codFunDel = $request->getPost('codFunDel');
-		$codFunAlterar = $request->getPost('codFunAlterar');
+		$CpfCli = $request->getPost('CpfCli');
+		$nomeCli = $request->getPost('nomeCli');
+		$foneCli = $request->getPost('foneCli');
+		$CpfCliDel = $request->getPost('CpfCliDel');
+		$CpfCliAlterar = $request->getPost('CpfCliAlterar');
 
-		if($codFunDel) {
-			$this->deletarFuncionario($codFunDel, 1);
+		if($CpfCliDel) {
+			$this->deletarCliente($CpfCliDel, 1);
 		}
-		else if($codFunAlterar) {
-			$this->alterarFuncionario($codFunAlterar, 1);
+		else if($CpfCliAlterar) {
+			$this->alterarCliente($CpfCliAlterar, 1);
 		}
 
 		if($searchMode == null) {
 			echo view('header');
-			echo view('buscaFun');
+			echo view('buscaCli');
 			echo view('footer');
 			return; 
 		}
 
-		$FuncionarioModel = new \App\Models\FuncionarioModel();
+		$ClienteModel = new \App\Models\ClienteModel();
 
 		switch($searchMode) {
 			case 2: // Nome
-				$registros = $FuncionarioModel->Like('nomeFun', $nomeFun)->findAll();
+				$registros = $ClienteModel->Like('nomeCli', $nomeCli)->findAll();
 				break;
 			case 3: // Telefone
-				$registros = $FuncionarioModel->Like('foneFun', $foneFun)->findAll();
+				$registros = $ClienteModel->Like('foneCli', $foneCli)->findAll();
 				break;
-			default: // Codigo
-				$registros = $FuncionarioModel->find($codFuncionario);
+			default: // Cpf
+				$registros = $ClienteModel->Like('CpfCli', $CpfCli)->findAll();
 				break;
 		}
 
 
-		$data['funcionarios'] = $registros;
+		$data['clientes'] = $registros;
 		$data['searchModeRd'] = $searchMode;
 
 		$qtdEncontrado = count((array)$registros);
 
 		if($qtdEncontrado <= 0) {
-			$data['msg'] = 'Funcionario não encontrado';
+			$data['msg'] = 'Cliente não encontrado';
 			$data['cor'] = 'alert-warning';
 			$data['icon'] = 
 			"<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='currentColor' class='bi bi-exclamation-triangle-fill flex-shrink-0 me-2' viewBox='0 0 16 16' role='img' aria-label='Warning:'>
@@ -136,7 +137,7 @@ class FuncionarioController extends BaseController {
 			</svg>";
 		}
 		else {
-			$data['msg'] = "Foram encontrado(s) " . (($searchMode == 1 || $qtdEncontrado == 1) ? "1 funcionário com sucesso!" : ($qtdEncontrado . " funcionários com sucesso!")) ;
+			$data['msg'] = "Foram encontrado(s) " . (($searchMode == 1 || $qtdEncontrado == 1) ? "1 cliente com sucesso!" : ($qtdEncontrado . " clientes com sucesso!")) ;
 			$data['cor'] = 'alert-success';
 			$data['icon'] = 
 			"<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='currentColor' class='bi bi-check-circle-fill flex-shrink-0 me-2' viewBox='0 0 16 16' aria-label='Success:'>
@@ -145,31 +146,31 @@ class FuncionarioController extends BaseController {
 		}
 
 		echo view('header', $data);
-		echo view('buscaFun', $data);
+		echo view('buscaCli', $data);
 		echo view('footer');	
 	}
-	public function alterarFuncionario($codFunAlterar=null, $page=null) {
+	public function alterarCliente($CpfCliAlterar=null, $page=null) {
 
 		if($page == 1)
-			$pageName = 'FuncionarioController/listaCodFuncionario';
+			$pageName = 'ClienteController/listaCpfCli';
 		else
-			$pageName = 'FuncionarioController/todosFuncionarios';
+			$pageName = 'ClienteController/todosClientes';
 
-		if(is_null($codFunAlterar)) {
+		if(is_null($CpfCliAlterar)) {
 			return redirect()->to(base_url($pageName));
 		}
 		$request = service('request');
-		$nomeFun = $request->getPost('nomeFun');
-		$foneFun = $request->getPost('foneFun');
+		$nomeCli = $request->getPost('nomeCli');
+		$foneCli = $request->getPost('foneCli');
 
-		$FuncionarioModel = new \App\Models\FuncionarioModel();
-		$registros = $FuncionarioModel->find($codFunAlterar);
+		$ClienteModel = new \App\Models\ClienteModel();
+		$registros = $ClienteModel->find($CpfCliAlterar);
 	
-		if($codFunAlterar) {
-			$registros->nomeFun = $nomeFun;
-			$registros->foneFun = $foneFun;
+		if($CpfCliAlterar) {
+			$registros->nomeCli = $nomeCli;
+			$registros->foneCli = $foneCli;
 
-			if($FuncionarioModel->update($codFunAlterar, $registros)) {
+			if($ClienteModel->update($CpfCliAlterar, $registros)) {
 				return redirect()->to(base_url($pageName));
 			} else {
 				return redirect()->to(base_url($pageName));
@@ -177,18 +178,18 @@ class FuncionarioController extends BaseController {
 		}
 	}
 
-	public function deletarFuncionario($codFuncionario=null, $page=null) {
+	public function deletarCliente($CpfCli=null, $page=null) {
 		if($page == 1)
-			$pageName = 'FuncionarioController/listaCodFuncionario';
+			$pageName = 'ClienteController/listaCpfCli';
 		else
-			$pageName = 'FuncionarioController/todosFuncionarios';
+			$pageName = 'ClienteController/todosClientes';
 
-		if(is_null($codFuncionario)) {
+		if(is_null($CpfCli)) {
 			return redirect()->to(base_url($pageName));
 		}
 
-		$FuncionarioModel = new \App\Models\FuncionarioModel();
-		if($FuncionarioModel->delete($codFuncionario)) {
+		$ClienteModel = new \App\Models\ClienteModel();
+		if($ClienteModel->delete($CpfCli)) {
 			return redirect()->to(base_url($pageName));
 		} else {
 			return redirect()->to(base_url($pageName));
